@@ -1,8 +1,8 @@
-const Back=()=>{
+const KutikomiChoice=()=>{
 
   return (
       <>
-        <div className="w-2/5 p-2 border-2 rounded-xl">
+        <div className="w-2/5 text-xs p-2 border-2 rounded-xl">
           <div className="flex gap-2 border-b-2">
               <div>a</div>
               <div className="text-gray-300">|</div>
@@ -16,4 +16,4 @@ const Back=()=>{
   );
 }
 
-export default Back
+export default KutikomiChoice

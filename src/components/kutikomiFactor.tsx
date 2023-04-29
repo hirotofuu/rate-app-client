@@ -1,4 +1,4 @@
-const Back=()=>{
+const KuetikomiFactir=()=>{
 
   return (
       <>
@@ -8,4 +8,4 @@ const Back=()=>{
   );
 }
 
-export default Back
+export default KuetikomiFactir

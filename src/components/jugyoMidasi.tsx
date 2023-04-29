@@ -1,4 +1,4 @@
-const Back=()=>{
+const JugyoTitle=()=>{
 
   return (
       <>
@@ -14,4 +14,4 @@ const Back=()=>{
   );
 }
 
-export default Back
+export default JugyoTitle

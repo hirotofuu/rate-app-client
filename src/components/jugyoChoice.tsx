@@ -1,4 +1,4 @@
-const Back=()=>{
+const JugyoChoice=()=>{
 
   return (
       <>
@@ -11,5 +11,5 @@ const Back=()=>{
   );
 }
 
-export default Back
+export default JugyoChoice
 
