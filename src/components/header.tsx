@@ -11,8 +11,10 @@ const Header=()=>{
             <button className="h-8 bg-slate-200 rounded-r-3xl">あ</button>
           </div>
 
-          <div className="gap-5 hidden xl:flex lg:flex md:flex sm:flex items-center">
-          </div>
+          <nav className="mr-3 gap-5 hidden xl:flex lg:flex md:flex sm:flex items-center">
+            <Link href="/create/jugyo" className="p-1 rounded-lg bg-blue-500 text-white hover:text-blue-500 hover:bg-white">授業＋</Link>
+            <Link href="/create/jugyo" className="p-1 rounded-lg bg-blue-500 text-white hover:text-blue-500 hover:bg-white">口コミ＋</Link>
+          </nav>
         </header>
       </>
   );

@@ -1,11 +1,13 @@
-const KuetikomiFactir=()=>{
+const KutikomiFactor=(props: any)=>{
 
   return (
       <>
-        <h1 className="mt-3 mb-2 text-lg font-semibold border-b-2 border-blue-500">キャンパス</h1>
-        <p className="text-sm">三田</p>
+        <div className="flex gap p-2 mx-2 border-b-2">
+          <h3 className="w-1/5 p-2 text-sm font-semibold border-blue-500">{props.title}</h3>
+          <p className="w-4/5 p-2 text-sm border-l-2">{props.content ? props.content : "記述なし"}</p>
+        </div>
       </>
   );
 }
 
-export default KuetikomiFactir
+export default KutikomiFactor

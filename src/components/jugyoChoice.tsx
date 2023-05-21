@@ -1,12 +1,15 @@
-const JugyoChoice=()=>{
-
+import Link from "next/link";
+const JugyoChoice=(props: any)=>{
+  const jugyo=props.jugyo
   return (
       <>
-        <div className="p-4 w-1/2 border-4">
-          <h1 className="text-md pb-2 font-semibold">線形代数概論</h1>
-          <h2 className="pb-2 text-sm">やまもとひろと</h2>
-          <h3 className="text-xs text-gray-600">キャンパス：三田　学部：経済学部</h3>
-        </div>
+        <li className="list-none">
+          <Link  href={`/class/${jugyo.id}`}  className="block group bg-white mt-2 p-4 w-full border-4">
+              <h1 className="text-md pb-2 font-semibold group-hover:text-blue-500">{jugyo.class_name}</h1>
+              <h2 className="pb-2 text-sm">{jugyo.teacher_name}</h2>
+              <h3 className="text-xs text-gray-600">キャンパス：{jugyo.campus}　学部：{jugyo.faculty}</h3>
+          </Link>
+        </li>
       </>
   );
 }

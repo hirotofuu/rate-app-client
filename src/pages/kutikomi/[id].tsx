@@ -1,15 +1,19 @@
 import Link from "next/link"
 import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
 import {showJugyo, showKutikomis} from '../../libs/fetchFunc'
+import Frame from '../../components/frame'
 import Header from '../../components/header'
+import KutikomiArticle from '../../components/kutikomiArticle'
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id: any = context.params?.id
   const kutikomi: any=await showKutikomis(id)
+  const jugyo: any=await showJugyo(kutikomi.jugyo_id)
   return{
     props: {
       factor: {
         kutikomi,
+        jugyo
       }
     },
     revalidate: 30
@@ -27,8 +31,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const ShowJugyo: NextPage = ({factor}: any) => {
   return (
     <>
+
       <Header></Header>
-      <h1>s</h1>
+      <Frame>
+        <KutikomiArticle kutikomi={factor.kutikomi} jugyo={factor.jugyo}></KutikomiArticle>
+      </Frame>
+
     </>
   );
 };

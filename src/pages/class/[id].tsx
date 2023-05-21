@@ -3,6 +3,9 @@ import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'ne
 import {showJugyo, fetchKutikomis} from '../../libs/fetchFunc'
 import type {Class} from "../../types/class"
 import Header from '../../components/header'
+import Frame from '../../components/frame'
+import JugyoTitle from '../../components/jugyoMidasi'
+import KutikomiChoice from '../../components/kutikomiChoice'
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id: any = context.params?.id
@@ -31,7 +34,15 @@ const ShowJugyo: NextPage = ({factor}: any) => {
   return (
     <>
       <Header></Header>
-      <h1>s</h1>
+      <JugyoTitle jugyo={factor.Jugyo}></JugyoTitle>
+      <Frame>
+        <h1 className="mt-8 mb-6 pb-1 border-b-2 border-gray-400">口コミ一覧</h1>
+        <ul>
+          {factor.kutikomis.map((kutikomi: any, index: any)=>
+            <KutikomiChoice key={index} kutikomi={kutikomi}></KutikomiChoice>
+            )}
+        </ul>
+      </Frame>
     </>
   );
 };
