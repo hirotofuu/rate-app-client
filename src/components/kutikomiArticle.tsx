@@ -7,7 +7,7 @@ const KutikomiArticle=(props: any)=>{
       <>
         <article className="mb-4 mt-10">
           <div className="p-4 bg-white">
-            <h1 className=" text-xl font-semibold hover:text-blue-500 hover:underline"><Link href={`/class/${1}`}>
+            <h1 className=" text-xl font-semibold hover:text-blue-500 hover:underline"><Link href={`/class/${jugyo.id}`}>
               {jugyo.class_name}の口コミ</Link></h1>
           </div>
 

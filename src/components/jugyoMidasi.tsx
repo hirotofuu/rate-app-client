@@ -1,4 +1,5 @@
 import {textToLink} from "../libs/textLink"
+import Link from "next/link";
 const JugyoTitle=(props: any)=>{
   const jugyo=props.jugyo
   return (
@@ -11,7 +12,7 @@ const JugyoTitle=(props: any)=>{
             <h3 className="mt-1 text-xs text-white">シラバスURL：{jugyo.url ? jugyo.url : "記載なし"}</h3>
         
           </div>
-          <button className="text-xs h-8 p-1 border-2 rounded-full">編集</button>
+          <Link href={`/create/edit/${jugyo.id}`} className="text-xs h-11 p-3 border-2 rounded-full">編集</Link>
         </div>
       </>
   );

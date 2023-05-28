@@ -3,7 +3,7 @@ import { NextPage, GetStaticProps, GetServerSideProps } from 'next';
 import {getIndexArticle} from '../libs/fetchFunc'
 import Header from '../components/header'
 import Frame from '../components/frame'
-import JugyoChoice from '../components/jugyoChoice'
+import JugyoChoice from '../components/choices/jugyoChoice'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categoryArticle: any=await getIndexArticle();
