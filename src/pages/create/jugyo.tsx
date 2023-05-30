@@ -30,8 +30,8 @@ const Register: NextPage = () => {
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     class_name: '',
     teacher_name: '',
-    faculty: '大体全体',
-    campus: '三田',
+    faculty: '',
+    campus: '',
     field: '',
     url: '',
     content: ''

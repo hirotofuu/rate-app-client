@@ -14,6 +14,18 @@ export async function getIndexArticle(){
     return res;
 }
 
+export async function filterArticle(faculty: string | string[], campus: string | string[], class_name: string | string[], teacher_name: string | string[]){
+    const res=  axios
+    .get(`/api/filterJugyo/${faculty}/${campus}/${class_name}/${teacher_name}`)
+    .then((res: AxiosResponse) => {
+      return res.data.data
+    })
+    .catch((err: AxiosError) => {
+      console.log(err)
+    });
+    return res;
+}
+
 export async function showJugyo(id: string | string[]){
     const res=axios
     .get(`/api/showJugyo/${id}`)
