@@ -1,15 +1,15 @@
 import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
-import {showJugyo} from '../../../libs/fetchFunc'
-import type {Class} from "../../../types/class"
+import {showJugyo} from '../../../../../libs/fetchFunc'
+import type {Class} from "../../../../../types/class"
 import { ChangeEvent, useState, useEffect } from 'react';
-import axios from '../../../libs/axios';
+import axios from '../../../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import ReactStarsRating from 'react-awesome-stars-rating';
-import Header from "../../../components/header"
-import Canceal from "../../../components/canceal"
-import Textarea from "../../../components/input/textarea"
-import RadioInput from "../../../components/input/radioInput"
+import Header from "../../../../../components/header"
+import Canceal from "../../../../../components/canceal"
+import Textarea from "../../../../../components/input/textarea"
+import RadioInput from "../../../../../components/input/radioInput"
 
 type RegisterForm={
   attend: string;
@@ -24,25 +24,22 @@ type RegisterForm={
   jugyo_id: string;
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const id: any = context.params?.id
-  const Jugyo: Class=await showJugyo(id)
+  const class_name: any = context.params?.class_name
+  const teacher_name: any = context.params?.teacher_name
+  
   return{
     props: {
       factor: {
-        Jugyo,
+        id,
+        class_name,
+        teacher_name
       }
     },
-    revalidate: 30
   };
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking', 
-  };
-};
 
 
 const Register: NextPage = ({factor}: any) => {
@@ -59,7 +56,7 @@ const Register: NextPage = ({factor}: any) => {
     comment: '',
     evaluate: '',
     rate: 0,
-    jugyo_id: factor.Jugyo.id,
+    jugyo_id: factor.id,
   })
 
 
@@ -107,14 +104,14 @@ const Register: NextPage = ({factor}: any) => {
             </div>
             <section className="mb-6">
               <label id="class_name" className="text-sm mb-2 text-gray-600">授業名</label>
-              <p className=" py-2 text-sm">{factor.Jugyo.class_name}</p>
+              <p className=" py-2 text-sm">{factor.class_name}</p>
             </section>
             <section className="mb-6">
               <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
-              <p className=" py-2 text-sm">{factor.Jugyo.teacher_name}</p>
+              <p className=" py-2 text-sm">{factor.teacher_name}</p>
             </section>
 
-            <form onSubmit={register} action={`/class/${factor.Jugyo.id}`}>
+            <form onSubmit={register} action={`/class/${factor.id}`}>
               <RadioInput key="attend" title="出席" name="attend" values={["ある", "ない"]}
               updateInput={updateRegisterForm}></RadioInput>
 

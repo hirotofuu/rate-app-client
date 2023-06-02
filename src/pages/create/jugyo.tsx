@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
 import { ChangeEvent, useState } from 'react';
 import axios from '../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -22,14 +22,28 @@ type RegisterForm={
   content: string
 };
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const class_name: any = context.query.class_name
+  const teacher_name: any = context.query.teacher_name
+  
+  return{
+    props: {
+      factor: {
+        class_name,
+        teacher_name
+      }
+    },
+  };
+}
 
-const Register: NextPage = () => {
+
+const Register: NextPage = ({factor}: any) => {
   const router = useRouter();
 
-  
+  const [redirectUrl, setRedirectUrl]=useState<string>('')
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
-    class_name: '',
-    teacher_name: '',
+    class_name: factor.class_name,
+    teacher_name: factor.teacher_name,
     faculty: '',
     campus: '',
     field: '',
@@ -56,7 +70,6 @@ const Register: NextPage = () => {
           .then((res: AxiosResponse) => {
           })
           .catch((err: AxiosError) => {
-            console.log(err)
           });
   };
 
@@ -71,11 +84,15 @@ const Register: NextPage = () => {
               <h1 className="my-3 text-3xl font-semibold text-gray-700">授業登録</h1>
               <p className="mb-8 text-gray-400">授業を登録して、見聞を広めよう!!!<br/>（すでに登録されている授業の場合、その授業のページにとばされます）</p>
             </div>
+            <section className="mb-6">
+              <label id="class_name" className="text-sm mb-2 text-gray-600">授業名</label>
+              <p className=" py-2 text-sm">{factor.class_name}</p>
+            </section>
+            <section className="mb-6">
+              <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
+              <p className=" py-2 text-sm">{factor.teacher_name}</p>
+            </section>
             <form onSubmit={register} action="/">
-              <Input key="class_name" title="授業名　(スペースや「・」は使わないでください)" name="class_name" holder="例）世界史A" value={registerForm.class_name} updateInput={updateRegisterForm}></Input>
-
-              <Input key="teacher_name" title="担当者名　(スペースや「・」は使わないでください)" name="teacher_name" holder="例）渡辺田中, ナランチャギルガ" value={registerForm.teacher_name} updateInput={updateRegisterForm}></Input>
-
               <Select key="faculty" title="学部" name="faculty" value={registerForm.faculty} contents={faculty_contents} updateSelect={updateSelectTextForm}></Select>
 
               <Select key="campus" title="キャンパス" name="campus" value={registerForm.campus} contents={campus_contents} updateSelect={updateSelectTextForm}></Select>

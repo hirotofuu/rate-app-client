@@ -4,8 +4,6 @@ import { useState, ChangeEvent } from "react"
 import {faculty_contents} from "../libs/faculty" 
 import {campus_contents} from "../libs/campus" 
 import { useRouter } from "next/router"
-import axios from '../libs/axios';
-import { AxiosError, AxiosResponse } from 'axios';
 
 type filter={
   faculty: string;
