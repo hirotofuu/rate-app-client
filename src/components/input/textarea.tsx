@@ -1,9 +1,14 @@
-const Textarea=(props: any)=>{
-  const title=props.title
-  const name=props.name
-  const holder=props.holder
-  const value=props.value
-  const updateTextarea=props.updateTextarea
+import { ChangeEvent } from "react";
+type Props={
+  title: string;
+  name: string;
+  holder: string;
+  value: string;
+  updateTextarea:  (e:  ChangeEvent<HTMLTextAreaElement>)=>void;
+}
+
+
+const Textarea:React.FC<Props>=({title, name, holder, value, updateTextarea})=>{
 
   return (
       <>

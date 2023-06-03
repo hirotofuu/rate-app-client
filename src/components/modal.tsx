@@ -1,23 +1,25 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, ReactNode } from 'react';
+import { Fragment } from 'react';
 import { useState, ChangeEvent } from 'react';
-import InputNo from "../components/input/inputTextNo"
+import InputNo from "../components/input/inputTextNo";
+import Button from "../components/button";
 import axios from '../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 
 type Props = {
-  type: boolean
+  type: boolean;
   isOpen: boolean;
   onClose: VoidFunction;
 };
+
 type isExist={
   class_name: string;
-  teacher_name: string,
+  teacher_name: string;
 };
 
 
-const Modal = ({ isOpen, type, onClose }: Props) => {
+const Modal:React.FC<Props> = ({ isOpen, type, onClose }) => {
   const router=useRouter()
   const [registerForm, setRegisterForm]=useState<isExist>({
     class_name: '',
@@ -35,6 +37,7 @@ const Modal = ({ isOpen, type, onClose }: Props) => {
           .then((res: AxiosResponse) => {
 
             if(!res.data.redirect_url){
+              onClose()
               router.push({
                 pathname:'/create/jugyo',
                 query: { class_name: registerForm.class_name, teacher_name: registerForm.teacher_name}
@@ -85,12 +88,17 @@ const Modal = ({ isOpen, type, onClose }: Props) => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl ">
-              <h1 className="mb-4">授業入力</h1>
+
+              <div className="flex justify-between mb-8">
+                <h1 className="text-xl font-semibold">授業入力</h1>
+                <button onClick={onClose} className="text-2xl">✖️</button>
+              </div>
+
               <InputNo key="class_name" title="授業名" name="class_name" holder="" value={registerForm.class_name} updateInput={updateRegisterForm}></InputNo>
 
               <InputNo key="teacher_name" title="担当名" name="teacher_name" holder="" value={registerForm.teacher_name} updateInput={updateRegisterForm}></InputNo>
 
-              <button className="" onClick={register}>送信</button>
+              <Button onPush={register}>送信</Button>
             </div>
           </Transition.Child>
         </div>

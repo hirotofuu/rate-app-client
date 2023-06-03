@@ -6,6 +6,7 @@ import axios from '../../../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import Button from "../../../../../components/button"
 import Header from "../../../../../components/header"
 import Canceal from "../../../../../components/canceal"
 import Textarea from "../../../../../components/input/textarea"
@@ -31,18 +32,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   
   return{
     props: {
-      factor: {
         id,
         class_name,
         teacher_name
-      }
     },
   };
 }
 
+type Factor={
+  id: string;
+  class_name: string;
+  teacher_name: string;
+}
 
-
-const Register: NextPage = ({factor}: any) => {
+const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   const router = useRouter();
 
   
@@ -56,7 +59,7 @@ const Register: NextPage = ({factor}: any) => {
     comment: '',
     evaluate: '',
     rate: 0,
-    jugyo_id: factor.id,
+    jugyo_id: id,
   })
 
 
@@ -73,13 +76,13 @@ const Register: NextPage = ({factor}: any) => {
     setRegisterForm({ ...registerForm, rate:value  });
   };
 
-  const register = (event: any) => {
+  const register = () => {
     if(!(registerForm.attend && registerForm.type && registerForm.day && registerForm.text && registerForm.task && registerForm.test && registerForm.comment && registerForm.evaluate))return 0
     axios
     .post('/api/createKutikomi', registerForm)
     .then((res: AxiosResponse) => {
       console.log('success');
-      router.push(`/class/${factor.Jugyo.id}`);
+      router.push(`/class/${id}`);
     })
     .catch((err: AxiosError) => {
       console.log(err)
@@ -104,14 +107,14 @@ const Register: NextPage = ({factor}: any) => {
             </div>
             <section className="mb-6">
               <label id="class_name" className="text-sm mb-2 text-gray-600">授業名</label>
-              <p className=" py-2 text-sm">{factor.class_name}</p>
+              <p className=" py-2 text-sm">{class_name}</p>
             </section>
             <section className="mb-6">
               <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
-              <p className=" py-2 text-sm">{factor.teacher_name}</p>
+              <p className=" py-2 text-sm">{teacher_name}</p>
             </section>
 
-            <form onSubmit={register} action={`/class/${factor.id}`}>
+            <form action={`/class/${id}`}>
               <RadioInput key="attend" title="出席" name="attend" values={["ある", "ない"]}
               updateInput={updateRegisterForm}></RadioInput>
 
@@ -148,12 +151,10 @@ const Register: NextPage = ({factor}: any) => {
                 />
               </section>
 
-              <Canceal></Canceal>
+              <Button onPush={register}>登録</Button>
 
-              <input
-                  type="submit"
-                  className="mt-4 w-full px-2 py-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none cursor-pointer"
-               />                
+              <Canceal></Canceal>
+               
             </form>
 
 

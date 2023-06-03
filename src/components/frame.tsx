@@ -1,4 +1,10 @@
-const Frame=({children}: any)=>{
+import { ReactNode } from 'react';
+
+type Props ={
+  children: ReactNode;
+}
+
+const Frame: React.FC<Props> =({children})=>{
   
   return(
     <>

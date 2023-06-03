@@ -4,6 +4,7 @@ import axios from '../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import type {Class} from "../../../types/class"
 import {showJugyo} from '../../../libs/fetchFunc'
+import Button from "../../../components/button"
 import Header from "../../../components/header"
 import Canceal from "../../../components/canceal"
 import InputNo from "../../../components/input/inputTextNo"
@@ -24,8 +25,8 @@ type RegisterForm={
 };
 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id: any = context.params?.id
+export const getServerSideProps: GetServerSideProps= async (context) => {
+  const id: string | string[]=context.params?.id ? context.params?.id : "";
   const Jugyo: Class=await showJugyo(id)
   return{
     props: {
@@ -35,6 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 }
+
 
 
 
@@ -69,7 +71,6 @@ const EditJugyo: NextPage = ({factor}: any) => {
         axios
           .put('/api/jugyoEdit', registerForm)
           .then((res: AxiosResponse) => {
-            console.log("seccess")
           })
           .catch((err: AxiosError) => {
             console.log(err)
@@ -107,13 +108,10 @@ const EditJugyo: NextPage = ({factor}: any) => {
 
               <InputNo key="url" title="シラバスURL(省略可)" name="url" holder="" value={registerForm.url} updateInput={updateRegisterForm}></InputNo>
 
-              <Canceal></Canceal>
               
-              <input 
-              type="submit" 
-              className="w-full mt-4 p-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none cursor-pointer"
-              value="更新"                
-              />
+              <Button onPush={register}>更新</Button>
+
+              <Canceal></Canceal>
 
             </form>
           </div>

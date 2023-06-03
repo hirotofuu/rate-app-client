@@ -1,7 +1,12 @@
-import {textToLink} from "../libs/textLink"
 import Link from "next/link";
-const JugyoTitle=(props: any)=>{
-  const jugyo=props.jugyo
+import {textToLink} from "../libs/textLink"
+import type {Class} from "../types/class";
+
+type Props = {
+  jugyo: Class;
+}
+
+const JugyoTitle:React.FC<Props>=({jugyo})=>{
   return (
       <>
         <div className="w-full p-6 flex justify-center bg-blue-500 text-white">

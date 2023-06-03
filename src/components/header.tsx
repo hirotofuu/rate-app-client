@@ -2,7 +2,10 @@ import Link from "next/link";
 import Modal from "../components/modal"
 import { useState , ChangeEvent} from "react";
 import { useRouter } from "next/router";
-const Header=()=>{
+
+
+
+const Header:React.FC=()=>{
   const router=useRouter();
   const [selectInput, setSelectInput]=useState<string>('class');
   const [isOpen, setIsOpen] = useState<boolean>(false);

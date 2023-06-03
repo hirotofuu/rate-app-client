@@ -1,9 +1,14 @@
-const Select=(props: any)=>{
-  const title=props.title
-  const name=props.name
-  const value=props.value
-  const contents=props.contents
-  const updateSelect=props.updateSelect
+import { ChangeEvent } from "react";
+type Props={
+  title: string;
+  name: string;
+  value: string;
+  contents: string[];
+  updateSelect:  (e:  ChangeEvent<HTMLSelectElement>)=>void;
+}
+
+
+const Select:React.FC<Props>=({title, name, value, contents, updateSelect})=>{
 
   return (
       <>

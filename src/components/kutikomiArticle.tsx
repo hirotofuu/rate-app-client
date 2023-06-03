@@ -1,8 +1,14 @@
 import Link from "next/link";
 import KutikomiFactor from "./kutikomiFactor"
-const KutikomiArticle=(props: any)=>{
-  const kutikomi=props.kutikomi
-  const jugyo=props.jugyo
+import type {Kutikomi} from "../types/kutikomi";
+import type {Class} from "../types/class";
+
+type Props = {
+  kutikomi: Kutikomi;
+  jugyo: Class;
+}
+
+const KutikomiArticle:React.FC<Props>=({kutikomi, jugyo})=>{
   return (
       <>
         <article className="mb-4 mt-10">

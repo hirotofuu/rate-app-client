@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { NextPage, GetStaticProps, GetServerSideProps } from 'next';
 import {getIndexArticle} from '../libs/fetchFunc'
+import type {Class} from "../types/class"
 import Header from '../components/header'
 import Frame from '../components/frame'
 import Filter from '../components/filterBox'
@@ -8,26 +9,28 @@ import Filter from '../components/filterBox'
 import JugyoChoice from '../components/choices/jugyoChoice'
 
 export const getStaticProps: GetStaticProps = async () => {
-  const categoryArticle: any=await getIndexArticle();
+  const Jugyo: Class[]=await getIndexArticle();
   return{
     props: {
-      factor: {
-        categoryArticle,
-      }
+        Jugyo,
     },
   };
 }
 
- const Home: NextPage = ({factor}: any) => {
+type Factor={
+  Jugyo: Class[];
+}
+
+ const Home: NextPage<Factor> = ({Jugyo}) => {
   return (
     <>
 
       <Header></Header>
       <Frame>
-        <Filter></Filter>
+        <Filter faculty="" campus="" class_name="" teacher_name=""></Filter>
         <h1 className="mt-10 mb-5 border-b-4 border-gray-300 font-semibold">一覧</h1>
         <ul>
-          {factor.categoryArticle.map((jugyoo: any, index: any)=>
+          {Jugyo.map((jugyoo: any, index: any)=>
           <JugyoChoice key={index} jugyo={jugyoo}></JugyoChoice>
           )}
         </ul>

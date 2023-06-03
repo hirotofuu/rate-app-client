@@ -5,7 +5,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import Canceal from "../../components/canceal"
 import Header from "../../components/header"
-import Input from "../../components/input/inputText"
+import Button from "../../components/button"
 import InputNo from "../../components/input/inputTextNo"
 import Select from "../../components/input/select"
 import {faculty_contents} from "../../libs/faculty" 
@@ -28,22 +28,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   
   return{
     props: {
-      factor: {
         class_name,
         teacher_name
-      }
     },
   };
 }
 
+type Factor={
+  class_name: string;
+  teacher_name: string;
+}
 
-const Register: NextPage = ({factor}: any) => {
+
+const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
   const router = useRouter();
 
   const [redirectUrl, setRedirectUrl]=useState<string>('')
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
-    class_name: factor.class_name,
-    teacher_name: factor.teacher_name,
+    class_name: class_name,
+    teacher_name: teacher_name,
     faculty: '',
     campus: '',
     field: '',
@@ -86,13 +89,13 @@ const Register: NextPage = ({factor}: any) => {
             </div>
             <section className="mb-6">
               <label id="class_name" className="text-sm mb-2 text-gray-600">授業名</label>
-              <p className=" py-2 text-sm">{factor.class_name}</p>
+              <p className=" py-2 text-sm">{class_name}</p>
             </section>
             <section className="mb-6">
               <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
-              <p className=" py-2 text-sm">{factor.teacher_name}</p>
+              <p className=" py-2 text-sm">{teacher_name}</p>
             </section>
-            <form onSubmit={register} action="/">
+            <form action="/">
               <Select key="faculty" title="学部" name="faculty" value={registerForm.faculty} contents={faculty_contents} updateSelect={updateSelectTextForm}></Select>
 
               <Select key="campus" title="キャンパス" name="campus" value={registerForm.campus} contents={campus_contents} updateSelect={updateSelectTextForm}></Select>
@@ -102,13 +105,10 @@ const Register: NextPage = ({factor}: any) => {
               <InputNo key="url" title="シラバスURL(省略可)" name="url" holder="" value={registerForm.url} updateInput={updateRegisterForm}></InputNo>
 
 
-              <Canceal></Canceal>
 
-              <input 
-              type="submit" 
-              className="w-full mt-4 p-2 text-white bg-indigo-500 rounded-md  focus:bg-indigo-600 focus:outline-none cursor-pointer"
-              value="登録"                
-              />
+              <Button onPush={register}>登録</Button>
+
+              <Canceal></Canceal>
 
 
             </form>

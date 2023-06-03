@@ -1,8 +1,12 @@
-const RadioInput=(props: any)=>{
-  const title=props.title
-  const name=props.name
-  const values=props.values
-  const updateInput=props.updateInput
+import { ChangeEvent } from "react";
+type Props={
+  title: string;
+  name: string;
+  values: string[];
+  updateInput:  (e:  ChangeEvent<HTMLInputElement>)=>void;
+}
+
+const RadioInput:React.FC<Props>=({title, name, values, updateInput})=>{
 
   return (
       <>

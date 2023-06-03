@@ -1,6 +1,12 @@
 import Link from "next/link";
-const JugyoChoice=(props: any)=>{
-  const jugyo=props.jugyo
+import type {Class} from "../../types/class"
+
+type Props = {
+  jugyo: Class;
+};
+
+
+const JugyoChoice: React.FC<Props>=({jugyo})=>{
   return (
       <>
         <li className="list-none">

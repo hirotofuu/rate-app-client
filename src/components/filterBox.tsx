@@ -5,20 +5,16 @@ import {faculty_contents} from "../libs/faculty"
 import {campus_contents} from "../libs/campus" 
 import { useRouter } from "next/router"
 
-type filter={
+type Props={
   faculty: string;
   campus: string;
   class_name: string;
   teacher_name: string;
 }
 
-const Filter=(props: any)=>{
+const Filter=({faculty, campus, class_name, teacher_name}: Props)=>{
   const router=useRouter()
-  const faculty=props.faculty
-  const campus=props.campus
-  const class_name=props.class_name
-  const teacher_name=props.teacher_name
-  const [registerForm, setRegisterForm]=useState<filter>({
+  const [registerForm, setRegisterForm]=useState<Props>({
     faculty: faculty,
     campus: campus,
     class_name: class_name,

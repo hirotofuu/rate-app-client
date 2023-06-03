@@ -1,10 +1,13 @@
-const InputNo=(props: any)=>{
-  const title=props.title
-  const name=props.name
-  const holder=props.holder
-  const value=props.value
-  const updateInput=props.updateInput
+import { ChangeEvent } from "react";
+type Props={
+  title: string;
+  name: string;
+  holder: string;
+  value: string;
+  updateInput:  (e:  ChangeEvent<HTMLInputElement>)=>void;
+}
 
+const InputNo:React.FC<Props>=({title, name, holder, value, updateInput})=>{
   return (
       <>
         <section className="mb-6">

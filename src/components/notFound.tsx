@@ -1,10 +1,14 @@
 import Link from "next/link";
 import Modal from "../components/modal";
 import { useState } from "react";
-const NotFound=(props: any)=>{
-  const buttonName: string=props.buttonName
-  const type: boolean=props.type
-  const url: string=props.url
+
+type Props={
+  buttonName: string;
+  type: boolean;
+  url: string
+}
+
+const NotFound:React.FC<Props>=({buttonName, type, url})=>{
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
       <>

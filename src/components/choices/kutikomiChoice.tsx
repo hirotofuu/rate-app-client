@@ -1,6 +1,11 @@
 import Link from "next/link";
-const KutikomiChoice=(props: any)=>{
-  const kutikomi=props.kutikomi
+import type {Kutikomi} from "../../types/kutikomi";
+
+type Props={
+  kutikomi: Kutikomi
+}
+
+const KutikomiChoice: React.FC<Props>=({kutikomi})=>{
   return (
       <>
         <li className="list-none">
