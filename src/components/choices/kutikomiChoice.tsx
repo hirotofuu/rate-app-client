@@ -1,20 +1,21 @@
 import Link from "next/link";
 import type {Kutikomi} from "../../types/kutikomi";
+import Star from "../../components/Star"
 
 type Props={
-  kutikomi: Kutikomi
+  kutikomi: Kutikomi;
 }
 
 const KutikomiChoice: React.FC<Props>=({kutikomi})=>{
   return (
       <>
         <li className="list-none">
-          <Link href={`/kutikomi/${kutikomi.id}`} className="block group w-full mt-2 p-6 border-4 bg-white hover:opacity-60">
+          <Link href={`/kutikomi/${kutikomi.id}`} className="block group w-full mt-2 p-4 border-4 bg-white hover:opacity-60">
             <div className="flex justify-between gap-2 pb-2 text-sm border-b-2">
               <div className="flex gap-2">
                 <h1>{kutikomi.evaluate}</h1>
                 <span className="text-gray-300">|</span>
-                <h1>{kutikomi.rate}</h1>
+                <h1><Star rateNumber={kutikomi.rate}></Star></h1>
               </div>
               <h1>投稿日：{kutikomi.day}</h1>
             </div>

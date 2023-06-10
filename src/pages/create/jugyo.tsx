@@ -8,6 +8,7 @@ import Header from "../../components/header"
 import Button from "../../components/button"
 import InputNo from "../../components/input/inputTextNo"
 import Select from "../../components/input/select"
+import Footer from '../../components/footer';
 import {faculty_contents} from "../../libs/faculty" 
 import {campus_contents} from "../../libs/campus" 
 
@@ -67,13 +68,12 @@ const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
 
   const register = () => {
     if(!(registerForm.class_name && registerForm.teacher_name))return 0
-    
-        axios
-          .post('/api/createJugyo', registerForm)
-          .then((res: AxiosResponse) => {
-          })
-          .catch((err: AxiosError) => {
-          });
+    axios
+    .post('/api/createJugyo', registerForm)
+    .then((res: AxiosResponse) => {
+    })
+    .catch((err: AxiosError) => {
+    });
   };
 
 
@@ -115,6 +115,7 @@ const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
 
           </div>
         </div>
+        <Footer></Footer>
       </>
 
 

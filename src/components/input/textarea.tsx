@@ -15,7 +15,7 @@ const Textarea:React.FC<Props>=({title, name, holder, value, updateTextarea})=>{
         <section className="mb-6">
           <div className="flex gap-2 mb-1 text-sm text-gray-600">
             <label id={name}>{`${title}`}</label>
-            <p>({value.length}/500)</p>
+            {value.length<=500 ? <p>({value.length}/500)</p> : <p className="text-red-500">({value.length}/500)</p>}
           </div>
           <textarea
           name={name}

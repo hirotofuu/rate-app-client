@@ -1,22 +1,33 @@
-import Link from "next/link"
-import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
-import {showJugyo, showKutikomis} from '../../libs/fetchFunc'
-import type {Class} from "../../types/class"
-import type {Kutikomi} from "../../types/kutikomi"
-import Frame from '../../components/frame'
-import Header from '../../components/header'
-import KutikomiArticle from '../../components/kutikomiArticle'
+import Link from "next/link";
+import { NextPage, GetStaticProps, GetStaticPaths } from 'next';
+import {showJugyo, showKutikomis, fetchComment} from '../../libs/fetchFunc'
+import type {Class} from "../../types/class";
+import type {Kutikomi} from "../../types/kutikomi";
+import type {Comment} from "../../types/comment";
+import { useState, ChangeEvent, useEffect } from "react";
+import axios from '../../libs/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import Footer from '../../components/footer';
+import Comments25 from "../../components/25/comment25"
+import Frame from '../../components/frame';
+import Header from '../../components/header';
+import NotFoundC from '../../components/notFoundComment';
+import CommentChoice from "../../components/choices/commentChoice";
+import KutikomiArticle from '../../components/kutikomiArticle';
+import TextareaComment from "../../components/input/textareComment";
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const id: any = context.params?.id
-  const kutikomi: Kutikomi=await showKutikomis(id)
-  const jugyo: Class=await showJugyo(kutikomi.jugyo_id)
+  const id: any = context.params?.id;
+  const kutikomi: Kutikomi=await showKutikomis(id);
+  const jugyo: Class=await showJugyo(kutikomi.jugyo_id);
+  const comments: Comment[]=await fetchComment(id);
   return{
     props: {
         kutikomi,
-        jugyo
+        jugyo,
+        comments
     },
-    revalidate: 30
+    revalidate: 20
   };
 }
 
@@ -28,20 +39,92 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 type Factor={
-  kutikomi: Kutikomi;
+  kutikomi: any;
   jugyo: Class;
+  comments: Comment[];
 }
 
+type CommentInput={
+  name: string;
+  day: string;
+  comment: string;
+  kutikomi_id: string;
+}
 
-const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo}) => {
+const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
+  const [comment, setComment]=useState<CommentInput>({
+    name: "",
+    day: "",
+    comment: "",
+    kutikomi_id: kutikomi.id,
+  })
+  const [commentss, setCommentss]=useState<Comment[]>(comments);
+  const [newComments, setNewComments]=useState<Comment[]>([]);
+
+  const updateCreateTextForm=(e: ChangeEvent<HTMLTextAreaElement>)=>{
+    setComment({ ...comment, [e.target.name]: e.target.value });
+  }
+  const updateRegisterForm = (e: ChangeEvent<HTMLInputElement>) => {
+    setComment({ ...comment, [e.target.name]: e.target.value });
+  };
+
+  const register = () => {
+    if(!comment.comment || comment.comment.length>=150)return;
+        axios
+          .post('/api/createComment', comment)
+          .then((res: AxiosResponse) => {
+            setNewComments([{
+              id: res.data,
+              name: comment.name,
+              day: comment.day,
+              comment: comment.comment,
+              replies: [],
+            }, ...newComments]);
+            setComment({...comment, comment: ""})
+          })
+          .catch((err: AxiosError) => {
+            console.log(err)
+          });
+  };
+
+  useEffect(()=>{
+    const now = new Date();
+    setComment({ ...comment, day: `${now.getFullYear()}/${(now.getMonth() + 1)}/${now.getDate()}` })
+  }, [])
+
   return (
     <>
 
       <Header></Header>
       <Frame>
         <KutikomiArticle kutikomi={kutikomi} jugyo={jugyo}></KutikomiArticle>
-      </Frame>
+        <div className="bg-white pl-3 mt-4">
+          <h1 className=" pt-4 pb-4 border-gray-300 font-semibold">コメント({commentss.length})</h1>
+          <input
+          type="text"
+          name="name"
+          value={comment.name}
+          onChange={updateRegisterForm}
+          placeholder="名前(省略可)"
+          className="mb-2 p-1 border border-gray-500 w-60 "/>
+          
+          <TextareaComment
+          holder="コメント"
+          name="comment"
+          value={comment.comment}
+          updateTextarea={updateCreateTextForm}
+          uploadTextarea={register}></TextareaComment>
+        </div>
 
+          {newComments.length+commentss.length==0 ? <NotFoundC te="コメントをしよう！！"></NotFoundC> : ""}
+        <ul className="bg-white mb-20">
+          {newComments.map((comment: Comment, index: number)=>
+          <CommentChoice key={index} comment={comment}></CommentChoice>
+          )}
+          <Comments25 Comments={commentss}></Comments25>
+        </ul>
+      </Frame>
+      <Footer></Footer>
     </>
   );
 };

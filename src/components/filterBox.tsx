@@ -12,7 +12,7 @@ type Props={
   teacher_name: string;
 }
 
-const Filter=({faculty, campus, class_name, teacher_name}: Props)=>{
+const Filter: React.FC<Props>=({faculty, campus, class_name, teacher_name})=>{
   const router=useRouter()
   const [registerForm, setRegisterForm]=useState<Props>({
     faculty: faculty,

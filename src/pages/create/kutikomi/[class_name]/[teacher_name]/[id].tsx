@@ -1,11 +1,10 @@
-import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
-import {showJugyo} from '../../../../../libs/fetchFunc'
-import type {Class} from "../../../../../types/class"
+import { NextPage, GetServerSideProps } from 'next';
 import { ChangeEvent, useState, useEffect } from 'react';
 import axios from '../../../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import ReactStarsRating from 'react-awesome-stars-rating';
+import Footer from '../../../../../components/footer';
 import Button from "../../../../../components/button"
 import Header from "../../../../../components/header"
 import Canceal from "../../../../../components/canceal"
@@ -77,7 +76,8 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   };
 
   const register = () => {
-    if(!(registerForm.attend && registerForm.type && registerForm.day && registerForm.text && registerForm.task && registerForm.test && registerForm.comment && registerForm.evaluate))return 0
+    if(!(registerForm.attend && registerForm.type && registerForm.day && registerForm.text && registerForm.task && registerForm.test && registerForm.comment && registerForm.evaluate))return 0;
+    if(registerForm.task.length>500 || registerForm.test.length>500 || registerForm.comment.length>500)return 0;
     axios
     .post('/api/createKutikomi', registerForm)
     .then((res: AxiosResponse) => {
@@ -160,7 +160,7 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
 
           </div>
         </div>
-
+        <Footer></Footer>
       </div>
 
   )

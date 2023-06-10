@@ -8,4 +8,5 @@ export type Class={
   field: string,
   url: string ,
   content: string,
+  stars?: any,
 };

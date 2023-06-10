@@ -1,20 +1,22 @@
 import { NextPage, GetStaticProps, GetServerSideProps } from 'next';
-import {filterArticle} from '../libs/fetchFunc'
-import {createRef, useCallback, useEffect} from 'react'
-import type {Class} from "../types/class"
-import Header from '../components/header'
-import Frame from '../components/frame'
-import Filter from '../components/filterBox'
-import NotFound from "../components/notFound"
-import JugyoChoice from '../components/choices/jugyoChoice'
+import {filterArticle} from '../libs/fetchFunc';
+import {createRef, useCallback, useEffect} from 'react';
+import type {Class} from "../types/class";
+import Footer from '../components/footer';
+import Header from '../components/header';
+import Frame from '../components/frame';
+import Filter from '../components/filterBox';
+import NotFound from "../components/notFound";
+import Jugyos25 from "../components/25/jugyo25"
+import JugyoChoice from '../components/choices/jugyoChoice';
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const faculty: any=context.query.faculty
-  const campus: any=context.query.campus
-  const class_name: any=context.query.class_name
-  const teacher_name: any=context.query.teacher_name
-  const filteredArticle: Class[]=await filterArticle(faculty, campus, class_name, teacher_name)
+  const faculty: any=context.query.faculty;
+  const campus: any=context.query.campus;
+  const class_name: any=context.query.class_name;
+  const teacher_name: any=context.query.teacher_name;
+  const filteredArticle: Class[]=await filterArticle(faculty, campus, class_name, teacher_name);
   return{
     props: {
         filteredArticle,
@@ -60,13 +62,11 @@ type Factor={
 
             {filteredArticle.length==0 ? <NotFound type={false} buttonName="授業を投稿しましょう" url={`/create/jugyo`}></NotFound> : ""}
 
-            {filteredArticle.map((jugyoo: any, index: any)=>
-            <JugyoChoice key={index} jugyo={jugyoo}></JugyoChoice>
-            )}
+            <Jugyos25 Jugyos={filteredArticle}></Jugyos25>
           </ul>
 
       </Frame>
-
+      <Footer></Footer>
     </>
   );
 };

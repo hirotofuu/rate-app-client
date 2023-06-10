@@ -6,6 +6,7 @@ import type {Class} from "../../../types/class"
 import {showJugyo} from '../../../libs/fetchFunc'
 import Button from "../../../components/button"
 import Header from "../../../components/header"
+import Footer from '../../../components/footer';
 import Canceal from "../../../components/canceal"
 import InputNo from "../../../components/input/inputTextNo"
 import Select from "../../../components/input/select"
@@ -21,7 +22,7 @@ type RegisterForm={
   campus: string;
   field: string;
   url: string;
-  content: string
+  content: string;
 };
 
 
@@ -30,20 +31,18 @@ export const getServerSideProps: GetServerSideProps= async (context) => {
   const Jugyo: Class=await showJugyo(id)
   return{
     props: {
-      factor: {
         Jugyo,
-      }
     },
   };
 }
 
 
+type Factor={
+  Jugyo: Class;
+}
 
 
-
-const EditJugyo: NextPage = ({factor}: any) => {
-  const Jugyo=factor.Jugyo
-
+const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
   
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     id: Jugyo.id,
@@ -51,9 +50,9 @@ const EditJugyo: NextPage = ({factor}: any) => {
     teacher_name: Jugyo.teacher_name,
     faculty: Jugyo.faculty,
     campus:Jugyo.campus,
-    field: Jugyo.field,
-    url: Jugyo.url,
-    content: Jugyo.content
+    field: Jugyo.field ? Jugyo.field : "",
+    url: Jugyo.url ? Jugyo.url : "",
+    content: Jugyo.content ? Jugyo.content : ""
   })
 
 
@@ -68,7 +67,8 @@ const EditJugyo: NextPage = ({factor}: any) => {
 
 
   const register = () => {
-        axios
+    if(Jugyo.faculty==registerForm.faculty && Jugyo.url==registerForm.url && Jugyo.field==registerForm.field && Jugyo.campus==registerForm.campus) return 0;
+    axios
           .put('/api/jugyoEdit', registerForm)
           .then((res: AxiosResponse) => {
           })
@@ -98,7 +98,7 @@ const EditJugyo: NextPage = ({factor}: any) => {
               <p className=" py-2 text-sm">{registerForm.teacher_name}</p>
             </section>
 
-            <form onSubmit={register} action={`/class/${factor.Jugyo.id}`}>
+            <form onSubmit={register} action={`/class/${Jugyo.id}`}>
 
               <Select key="faculty" title="学部" name="faculty" value={registerForm.faculty} contents={faculty_contents} updateSelect={updateSelectTextForm}></Select>
 
@@ -116,6 +116,7 @@ const EditJugyo: NextPage = ({factor}: any) => {
             </form>
           </div>
         </div>
+        <Footer></Footer>
       </>
 
 

@@ -12,10 +12,10 @@ const RadioInput:React.FC<Props>=({title, name, values, updateInput})=>{
       <>
         <section key={name} className="mb-6">
           <label id={name} className="text-sm text-gray-600">{title}</label>
-          <ul>
+          <ul className="flex gap-1">
             {values.map((value: string, index: number)=>
 
-              <li key={index} id={value} className="flex gap-1">
+              <li key={index} id={value} className="flex">
                 <input
                   type="radio"
                   name={name}
