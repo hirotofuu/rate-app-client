@@ -3,12 +3,15 @@ import KutikomiFactor from "./kutikomiFactor"
 import type {Kutikomi} from "../types/kutikomi";
 import type {Class} from "../types/class";
 import  Star from "../components/Star"
+import {deleteKutikomi, deleteJ} from "../libs/deleteFunc"
+import {useApiToken} from "../hooks/useApiToken"
 type Props = {
   kutikomi: Kutikomi;
   jugyo: Class;
 }
 
 const KutikomiArticle:React.FC<Props>=({kutikomi, jugyo})=>{
+  const {apiToken}=useApiToken()
   return (
       <>
         <article className="mt-10">
@@ -39,6 +42,7 @@ const KutikomiArticle:React.FC<Props>=({kutikomi, jugyo})=>{
             </section>
           </div>
         </article>
+        {apiToken ? <button onClick={()=>deleteJ(deleteKutikomi, kutikomi.id, apiToken)}>delete</button> : ""}
 
       </>
   );

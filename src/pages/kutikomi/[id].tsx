@@ -52,9 +52,10 @@ type CommentInput={
 }
 
 const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
+  const now = new Date();
   const [comment, setComment]=useState<CommentInput>({
     name: "",
-    day: "",
+    day: `${now.getFullYear()}/${(now.getMonth() + 1)}/${now.getDate()}`,
     comment: "",
     kutikomi_id: kutikomi.id,
   })
@@ -87,10 +88,6 @@ const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
           });
   };
 
-  useEffect(()=>{
-    const now = new Date();
-    setComment({ ...comment, day: `${now.getFullYear()}/${(now.getMonth() + 1)}/${now.getDate()}` })
-  }, [])
 
   return (
     <>

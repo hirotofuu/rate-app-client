@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { NextPage, GetStaticProps, GetServerSideProps } from 'next';
+import { NextPage, GetStaticProps } from 'next';
+import {useApiToken} from "../hooks/useApiToken"
 import {getIndexArticle} from '../libs/fetchFunc';
-import { useState, ChangeEvent } from "react";
 import type {Class} from "../types/class";
 import Jugyos25 from "../components/25/jugyo25";
 import Header from '../components/header';
@@ -23,6 +22,7 @@ type Factor={
 }
 
  const Home: NextPage<Factor> = ({Jugyo}) => {
+  const {apiToken}=useApiToken();
   return (
     <>
 

@@ -1,8 +1,9 @@
-import type {Comment, Reply} from "../../types/comment"
+import type {Comment, Reply, newReply} from "../../types/comment"
 import { useState, ChangeEvent} from "react";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCaretUp, faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import ReplyChoice from "../choices/replyChice"
+import NewReplyChoice from "../choices/newReplyChoice"
 import axios from '../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import TextareaComment from "../../components/input/textareComment"
@@ -26,6 +27,7 @@ const CommentChoice: React.FC<Props> =({comment})=>{
     comment_id: comment.id,
   })
   const [displayReply, setDisplayRply]=useState<Reply[]>(comment.replies);
+  const [newplayReply, setNewplayRply]=useState<newReply[]>([]);
   const [isReply, setIsRepy]=useState<boolean>(false)
 
   const updateCreateTextForm=(e: ChangeEvent<HTMLTextAreaElement>)=>{
@@ -40,8 +42,8 @@ const CommentChoice: React.FC<Props> =({comment})=>{
         axios
           .post('/api/createReply', replyDraft)
           .then((res: AxiosResponse) => {
-            setDisplayRply([
-              ...displayReply, 
+            setNewplayRply([
+              ...newplayReply, 
               {
               name: replyDraft.name,
               day: replyDraft.day,
@@ -72,6 +74,9 @@ const CommentChoice: React.FC<Props> =({comment})=>{
 
 
       {isReply ? <ul className=" w-2/3 ml-3 pt-3 pl-3 border-l-2">
+        {newplayReply.map((rep: newReply, index: number)=>
+        <li key={index}><NewReplyChoice reply={rep}></NewReplyChoice></li>
+        )}
         {displayReply.map((rep: Reply, index: number)=>
         <li key={index}><ReplyChoice reply={rep}></ReplyChoice></li>
         )}

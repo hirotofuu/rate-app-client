@@ -7,7 +7,13 @@ export type Comment={
 };
 
 export type Reply={
-  id?: string,
+  id: string,
+  name: string,
+  day: string,
+  reply: string,
+};
+
+export type newReply={
   name: string,
   day: string,
   reply: string,

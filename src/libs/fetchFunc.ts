@@ -7,6 +7,7 @@ export async function getIndexArticle(){
     const res=axios
     .get('/api/fetchIndexJugyo')
     .then((response: AxiosResponse) => {
+      console.log(11)
       return response.data.data;
     })
     .catch((err: AxiosError) => console.log(err));
@@ -59,8 +60,17 @@ export async function fetchComment(id: any){
     const res=axios
     .get(`/api/fetchComment/${id}`)
     .then((response: AxiosResponse) => {
+      console.log(response.data.data)
       return response.data.data;
     })
     .catch((err: AxiosError) => console.log(err));
     return res;
+}
+
+const deleteJ=(deletee: (id: string, apiToken: string)=>void, i: string, a: string)=>{
+  if (confirm('本当に削除しますか？')) {
+    deletee(i, a);
+} else {
+    console.log('キャンセルボタンが押されました。')
+}
 }

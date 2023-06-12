@@ -46,12 +46,12 @@ type Factor={
 
 const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   const router = useRouter();
-
+  const now = new Date();
   
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     attend: '',
     type: '',
-    day: '',
+    day: `${now.getFullYear()}/${(now.getMonth() + 1)}/${now.getDate()}`,
     text: '',
     task: '',
     test: '',
@@ -89,10 +89,6 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
     });
   };
 
-  useEffect(()=>{
-    const now = new Date();
-    setRegisterForm({ ...registerForm, day: `${now.getFullYear()}/${(now.getMonth() + 1)}/${now.getDate()}` })
-  }, [])
 
 
   return (
