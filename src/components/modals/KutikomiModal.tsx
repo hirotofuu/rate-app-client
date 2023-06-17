@@ -3,57 +3,40 @@ import { Fragment } from 'react';
 import { useState, ChangeEvent } from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faXmark} from '@fortawesome/free-solid-svg-icons'
-import InputNo from "../components/input/inputTextNo";
-import Button from "../components/button";
-import axios from '../libs/axios';
+import InputFactor from "../inputFactor"
+import Button from "../button";
+import axios from '../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 
+type RegisterForm={
+  attend: string;
+  type: string;
+  day: string;
+  text: string;
+  test: string;
+  task: string;
+  comment: string;
+  evaluate: string;
+  rate: number;
+  jugyo_id: string;
+};
+
 type Props = {
-  type: boolean;
   isOpen: boolean;
+  registerForm: RegisterForm,
   onClose: VoidFunction;
-};
-
-type isExist={
-  class_name: string;
-  teacher_name: string;
+  onPush: VoidFunction;
 };
 
 
-const Modal:React.FC<Props> = ({ isOpen, type, onClose }) => {
+
+
+const KutikomiModal:React.FC<Props> = ({ isOpen, onClose, registerForm, onPush }) => {
   const router=useRouter()
-  const [registerForm, setRegisterForm]=useState<isExist>({
-    class_name: '',
-    teacher_name: '',
-  })
 
-  const updateRegisterForm = (e: ChangeEvent<HTMLInputElement>) => {
-    setRegisterForm({ ...registerForm, [e.target.name]: e.target.value.replace(/\s+/g, "") });
-  };
 
-  const register = () => {
-    const apiCode=type ? "isExistJugyo" : "isExistJugyoToJugyo";
-    if(!(registerForm.class_name && registerForm.teacher_name))return 0;
-    if(registerForm.class_name.length>30 || registerForm.teacher_name.length>30)return 0;
-        axios
-          .get(`/api/${apiCode}/${registerForm.class_name}/${registerForm.teacher_name}`)
-          .then((res: AxiosResponse) => {
-            onClose()
-            if(!res.data.redirect_url){
-              router.push({
-                pathname:'/create/jugyo',
-                query: { class_name: registerForm.class_name, teacher_name: registerForm.teacher_name}
-              });
-            }else{
-              router.push(res.data.redirect_url);
-            }
 
-          })
-          .catch((err: AxiosError) => {
-            console.log(err)
-          });
-  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -93,15 +76,24 @@ const Modal:React.FC<Props> = ({ isOpen, type, onClose }) => {
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl ">
 
               <div className="flex justify-between mb-6 text-xl">
-                <h1 className="font-semibold">授業入力</h1>
+                <h1 className="font-semibold">確認</h1>
                 <button onClick={onClose}><FontAwesomeIcon icon={faXmark} className="text-2xl"/></button>
               </div>
 
-              <InputNo key="class_name" title="授業名(空白や「・」は使わないでください)" name="class_name" holder="例)世界史b" value={registerForm.class_name} updateInput={updateRegisterForm}></InputNo>
 
-              <InputNo key="teacher_name" title="担当名(空白や「・」は使わないでください)" name="teacher_name" holder="例)山田渡辺、ジョンマイケル" value={registerForm.teacher_name} updateInput={updateRegisterForm}></InputNo>
+              <div className="overflow-x-scroll h-72">
+              
+                <InputFactor title="出席" content={registerForm.attend}></InputFactor>
+                <InputFactor title="形式" content={registerForm.type}></InputFactor>
+                <InputFactor title="教科書" content={registerForm.text}></InputFactor>
+                <InputFactor title="課題" content={registerForm.task}></InputFactor>
+                <InputFactor title="難易度" content={registerForm.evaluate}></InputFactor>
+                <InputFactor title="まとめ" content={registerForm.comment}></InputFactor>
+                <InputFactor title="評価" content={registerForm.rate}></InputFactor>
+              </div>
+              
 
-              <Button onPush={register}>送信</Button>
+              <Button onPush={onPush}>送信</Button>
             </div>
           </Transition.Child>
         </div>
@@ -110,4 +102,4 @@ const Modal:React.FC<Props> = ({ isOpen, type, onClose }) => {
   );
 };
 
-export default Modal;
+export default KutikomiModal;

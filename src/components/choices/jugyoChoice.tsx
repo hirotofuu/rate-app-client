@@ -10,6 +10,7 @@ const JugyoChoice: React.FC<Props>=({jugyo})=>{
   for(const x of jugyo.stars){
     stars=stars+x[0];
   }
+
   return (
       <>
         <li className="list-none">

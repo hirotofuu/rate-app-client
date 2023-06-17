@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
-  onPush: VoidFunction;
+  onPush: any;
 };
 
 

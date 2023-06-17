@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Modal from "../components/modal"
+import Modal from "./modals/modal"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMagnifyingGlass, faBars} from '@fortawesome/free-solid-svg-icons'
 import { useState , ChangeEvent} from "react";
@@ -43,6 +43,7 @@ const Header:React.FC=()=>{
             <option key="teacher" value="teacher">担当名</option>
             </select>
             <input type="text" placeholder="検索" className="xl:w-96 lg:w-96  w-44 pl-2 h-8 bg-gray-200"
+            onKeyDown={goSearch}
             value={input}
             onChange={(e: ChangeEvent<HTMLInputElement>)=>{setInput(e.target.value)}}
             />

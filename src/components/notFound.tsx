@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Modal from "../components/modal";
+import Modal from "./modals/modal";
 import { useState } from "react";
 
 type Props={

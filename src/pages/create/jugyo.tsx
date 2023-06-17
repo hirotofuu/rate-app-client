@@ -1,8 +1,10 @@
 import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useCallback } from 'react';
 import axios from '../../libs/axios';
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import JugyoModal from "../../components/modals/JugyoModal"
 import Canceal from "../../components/canceal"
 import Header from "../../components/header"
 import Button from "../../components/button"
@@ -43,7 +45,7 @@ type Factor={
 
 const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
   const router = useRouter();
-
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [redirectUrl, setRedirectUrl]=useState<string>('')
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     class_name: class_name,
@@ -71,10 +73,37 @@ const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
     axios
     .post('/api/createJugyo', registerForm)
     .then((res: AxiosResponse) => {
+      router.push("/")
     })
     .catch((err: AxiosError) => {
     });
   };
+
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const onSubmit = useCallback(async (e: any) => {
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+    const reCaptchaToken = await executeRecaptcha('kutikomi');
+    
+    
+    const apiEndPoint = '/api/enquiry';
+  const isOk = await fetch(apiEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      token: reCaptchaToken,
+    }),
+  });
+  if(isOk.ok){
+    console.log(isOk)
+    setIsOpen(true);
+  }
+  } , [executeRecaptcha]
+  );
 
 
   return (
@@ -95,7 +124,6 @@ const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
               <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
               <p className=" py-2 text-sm">{teacher_name}</p>
             </section>
-            <form action="/">
               <Select key="faculty" title="学部" name="faculty" value={registerForm.faculty} contents={faculty_contents} updateSelect={updateSelectTextForm}></Select>
 
               <Select key="campus" title="キャンパス" name="campus" value={registerForm.campus} contents={campus_contents} updateSelect={updateSelectTextForm}></Select>
@@ -106,16 +134,15 @@ const Register: NextPage<Factor> = ({class_name, teacher_name}) => {
 
 
 
-              <Button onPush={register}>登録</Button>
+              <Button onPush={onSubmit}>確認</Button>
 
               <Canceal></Canceal>
 
 
-            </form>
-
           </div>
         </div>
         <Footer></Footer>
+        <JugyoModal onPush={register} onClose={()=>setIsOpen(false)} isOpen={isOpen} registerForm={registerForm}></JugyoModal>
       </>
 
 

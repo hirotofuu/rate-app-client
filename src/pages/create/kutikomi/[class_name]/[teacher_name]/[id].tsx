@@ -1,8 +1,9 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useState, useEffect, useCallback } from 'react';
 import axios from '../../../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import ReactStarsRating from 'react-awesome-stars-rating';
 import Footer from '../../../../../components/footer';
 import Button from "../../../../../components/button"
@@ -10,6 +11,7 @@ import Header from "../../../../../components/header"
 import Canceal from "../../../../../components/canceal"
 import Textarea from "../../../../../components/input/textarea"
 import RadioInput from "../../../../../components/input/radioInput"
+import KutikomiModal from "../../../../../components/modals/KutikomiModal"
 
 type RegisterForm={
   attend: string;
@@ -47,7 +49,9 @@ type Factor={
 const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   const router = useRouter();
   const now = new Date();
-  
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     attend: '',
     type: '',
@@ -61,8 +65,46 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
     jugyo_id: id,
   })
 
+  const register = async() => {
+    const a= await axios
+    .post('/api/createKutikomi', registerForm)
+    .then((res: AxiosResponse) => {
+      router.push(`/class/${id}`)
+    })
+    .catch((err: AxiosError) => {
+      console.log(err)
+    });
+  };
+
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const onSubmit = useCallback(async (e: any) => {
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+    const reCaptchaToken = await executeRecaptcha('kutikomi');
+    
+    
+    const apiEndPoint = '/api/enquiry';
+  const isOk = await fetch(apiEndPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      token: reCaptchaToken,
+    }),
+  });
+  if(isOk.ok){
+    console.log(isOk)
+    setIsOpen(true);
+  }
+  } , [executeRecaptcha]
+  );
 
 
+
+    
   const updateRegisterForm = (e: ChangeEvent<HTMLInputElement>) => {
     setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
   };
@@ -73,20 +115,6 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
 
   const onChangeStar = (value: number) => {
     setRegisterForm({ ...registerForm, rate:value  });
-  };
-
-  const register = () => {
-    if(!(registerForm.attend && registerForm.type && registerForm.day && registerForm.text && registerForm.task && registerForm.test && registerForm.comment && registerForm.evaluate))return 0;
-    if(registerForm.task.length>500 || registerForm.test.length>500 || registerForm.comment.length>500)return 0;
-    axios
-    .post('/api/createKutikomi', registerForm)
-    .then((res: AxiosResponse) => {
-      console.log('success');
-      router.push(`/class/${id}`);
-    })
-    .catch((err: AxiosError) => {
-      console.log(err)
-    });
   };
 
 
@@ -110,7 +138,6 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
               <p className=" py-2 text-sm">{teacher_name}</p>
             </section>
 
-            <form action={`/class/${id}`}>
               <RadioInput key="attend" title="出席" name="attend" values={["ある", "ない"]}
               updateInput={updateRegisterForm}></RadioInput>
 
@@ -147,16 +174,15 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
                 />
               </section>
 
-              <Button onPush={register}>登録</Button>
-
+              <Button onPush={onSubmit}>確認</Button>
               <Canceal></Canceal>
-               
-            </form>
+
 
 
           </div>
         </div>
         <Footer></Footer>
+        <KutikomiModal onPush={register} onClose={()=>setIsOpen(false)} isOpen={isOpen} registerForm={registerForm}></KutikomiModal>
       </div>
 
   )

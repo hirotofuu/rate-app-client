@@ -69,7 +69,7 @@ const CommentChoice: React.FC<Props> =({comment})=>{
 
       <button onClick={()=>setIsRepy(!isReply)} className="text-xs border-2 mt-3 p-1 font-semibold rounded-full">
         {isReply ? <FontAwesomeIcon icon={faCaretDown} className="mr-1"/>: <FontAwesomeIcon icon={faCaretUp} className="mr-1"/>}
-        返信{displayReply.length}件
+        返信{displayReply.length+newplayReply.length}件
       </button>
 
 

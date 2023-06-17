@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-awesome-stars-rating": "^0.13.6",
     "react-dom": "18.2.0",
+    "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.44.0",
     "recoil": "^0.7.7",
     "tailwindcss": "3.3.1",
