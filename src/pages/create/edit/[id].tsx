@@ -29,7 +29,7 @@ type RegisterForm={
 
 
 export const getServerSideProps: GetServerSideProps= async (context) => {
-  const id: string | string[]=context.params?.id ? context.params?.id : "";
+  const id: any=context.params?.id ;
   const Jugyo: Class=await showJugyo(id)
   return{
     props: {
@@ -52,9 +52,9 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
     teacher_name: Jugyo.teacher_name,
     faculty: Jugyo.faculty,
     campus:Jugyo.campus,
-    field: Jugyo.field ? Jugyo.field : "",
-    url: Jugyo.url ? Jugyo.url : "",
-    content: Jugyo.content ? Jugyo.content : ""
+    field: Jugyo.field,
+    url: Jugyo.url,
+    content: Jugyo.content
   })
 
   const router=useRouter();
@@ -69,7 +69,7 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
   };
 
 
-  const register =useCallback(async (e: any) => {
+  const register = async (e: any) => {
     e.preventDefault();
     if(!(Jugyo.faculty==registerForm.faculty && Jugyo.url==registerForm.url && Jugyo.field==registerForm.field && Jugyo.campus==registerForm.campus)){
       axios.put('/api/jugyoEdit', registerForm)
@@ -80,7 +80,7 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
               console.log(err)
             });
     }
-        } , [registerForm]);
+        };
 
 
   return (

@@ -14,18 +14,13 @@ import Meta from "../components/meta"
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const faculty: any=context.query.faculty;
-  const campus: any=context.query.campus;
-  const class_name: any=context.query.class_name;
-  const teacher_name: any=context.query.teacher_name;
-  const filteredArticle: Class[]=await filterArticle(faculty, campus, class_name, teacher_name);
+
+  const class_name: any=context.query.class_name;;
+  const filteredArticle: Class[]=await filterArticle("all", "all", class_name, "all");
   return{
     props: {
         filteredArticle,
-        faculty,
-        campus,
         class_name,
-        teacher_name
     },
   };
 }
@@ -38,10 +33,9 @@ type Factor={
   teacher_name: string;
 }
 
- const Home: NextPage<Factor> = ({filteredArticle, faculty, campus, class_name, teacher_name}) => {
+ const Search: NextPage<Factor> = ({filteredArticle, faculty, campus, class_name, teacher_name}) => {
   const ref = createRef<HTMLUListElement>()
   const [Jugyo, setJugyo] = useState<Class[]>([])
-  const {data: J} = useFetch(`/api/filterJugyo/${faculty}/${campus}/${class_name}/${teacher_name}`)
   const scrollToBottomOfList = useCallback(() => {
     ref!.current!.scrollIntoView({
       behavior: 'smooth',
@@ -49,26 +43,18 @@ type Factor={
     })
   }, [ ref ])
 
-  useEffect(()=>{
-    scrollToBottomOfList()
-    if(J){
-      setJugyo(J.data)
-    } 
-  }, [filteredArticle, J])
   return (
     <>
       <Meta pageTitle={`検索結果`} pageDesc={`検索結果`}></Meta>
       <Header></Header>
       <Frame>
 
-        <Filter  faculty={faculty} campus={campus} class_name={class_name!="all" ? class_name : ""} teacher_name={teacher_name!="all" ? teacher_name : ""}></Filter>
-
           <ul className="mb-96" ref={ref}>
             <h1 className="pt-10 mb-5 border-b-4 border-gray-300 font-semibold">検索結果 ({filteredArticle.length})</h1>
 
             {filteredArticle.length==0 ? <NotFound type={false} buttonName="授業を投稿しましょう" url={`/create/jugyo`}></NotFound> : ""}
 
-            <Jugyos25 Jugyos={Jugyo}></Jugyos25>
+            <Jugyos25 Jugyos={filteredArticle}></Jugyos25>
           </ul>
 
       </Frame>
@@ -77,4 +63,4 @@ type Factor={
   );
 };
 
-export default Home;
+export default Search;

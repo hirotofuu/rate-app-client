@@ -60,7 +60,6 @@ const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
     comment: "",
     kutikomi_id: kutikomi.id,
   })
-  const [commentss, setCommentss]=useState<Comment[]>(comments);
   const [newComments, setNewComments]=useState<Comment[]>([]);
 
   const updateCreateTextForm=(e: ChangeEvent<HTMLTextAreaElement>)=>{
@@ -97,7 +96,7 @@ const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
       <Frame>
         <KutikomiArticle kutikomi={kutikomi} jugyo={jugyo}></KutikomiArticle>
         <div className="bg-white pl-3 mt-4">
-          <h1 className=" pt-4 pb-4 border-gray-300 font-semibold">コメント({commentss.length})</h1>
+          <h1 className=" pt-4 pb-4 border-gray-300 font-semibold">コメント({comments.length})</h1>
           <input
           type="text"
           name="name"
@@ -114,12 +113,12 @@ const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
           uploadTextarea={register}></TextareaComment>
         </div>
 
-          {newComments.length+commentss.length==0 ? <NotFoundC te="コメントをしよう！！"></NotFoundC> : ""}
+          {newComments.length+comments.length==0 ? <NotFoundC te="コメントをしよう！！"></NotFoundC> : ""}
         <ul className="bg-white mb-20">
           {newComments.map((comment: Comment, index: number)=>
           <CommentChoice key={index} comment={comment}></CommentChoice>
           )}
-          <Comments25 Comments={commentss}></Comments25>
+          <Comments25 Comments={comments}></Comments25>
         </ul>
       </Frame>
       <Footer></Footer>
