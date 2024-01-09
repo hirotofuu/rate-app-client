@@ -4,30 +4,24 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMagnifyingGlass, faBars} from '@fortawesome/free-solid-svg-icons'
 import { useState , ChangeEvent} from "react";
 import { useRouter } from "next/router";
+import { Button, Drawer } from "@mui/material";
 import NavBar from "../components/navBar"
 
 
 
 const Header:React.FC=()=>{
   const router=useRouter();
-  const [selectInput, setSelectInput]=useState<string>('class');
+  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [input, setInput]=useState<string>('');
   const [type, setType]=useState<boolean>(true);
-  const [isBar, setIsbar]=useState<boolean>(false);
+  const [isDrawer, setIsDrawer]=useState<boolean>(false);
   const goSearch=()=>{
     if(!input)return 0
-    if(selectInput=="class"){
     router.push({
       pathname:'/search',
         query: {faculty : "all", campus: "all", class_name: input, teacher_name: "all"},
       });
-    }else{
-      router.push({
-        pathname:'/search',
-        query: {faculty : "all", campus: "all", class_name: "all", teacher_name: input}
-      }); 
-    }
   }
   return (
       <>
@@ -35,15 +29,7 @@ const Header:React.FC=()=>{
           <Link href="/" className="xl:text-4xl lg:text-4xl md:text-4xl sm:text-4xl text-3xl lg:ml-6 xl:ml-6 md:ml-6 sm:ml-6 ml-1">慶應楽単</Link>
 
           <div className="hidden xl:flex lg:flex md:flex sm:flex mr-3">
-            <select name="what" className=" p-1 h-8 rounded-l-lg bg-gray-300 text-xs"
-            value={selectInput}
-            onChange={(e: ChangeEvent<HTMLSelectElement>)=>{setSelectInput(e.target.value)}}
-            >
-            <option key="class" value="class">授業名</option>
-            <option key="teacher" value="teacher">担当名</option>
-            </select>
-            <input type="text" placeholder="検索" className="xl:w-96 lg:w-96  w-44 pl-2 h-8 bg-gray-200"
-            onKeyDown={goSearch}
+            <input type="text" placeholder="検索" className="xl:w-96 lg:w-96 rounded-l-xl w-44 pl-2 h-8 bg-gray-200"
             value={input}
             onChange={(e: ChangeEvent<HTMLInputElement>)=>{setInput(e.target.value)}}
             />
@@ -62,9 +48,44 @@ const Header:React.FC=()=>{
             className="p-2 rounded-md bg-indigo-500 text-white text-xs font-semibold hover:text-indigo-500 hover:bg-white">
             口コミ＋</button>
           </nav>
-          <button onClick={()=>{setIsbar(!isBar)}} className="xl:hidden lg:hidden md:hidden sm:hidden mr-4 text-3xl text-indigo-500 p-2"><FontAwesomeIcon icon={faBars}/></button>
+          <nav className="flex xl:hidden lg:hidden md:hidden sm:hidden">
+            <button onClick={()=>{setIsOpenSearch(!isOpenSearch)}} className="mr-4 text-3xl text-indigo-500 p-2"><FontAwesomeIcon icon={faMagnifyingGlass} className="text-lg p-2 "/></button>
+            <button onClick={()=>setIsDrawer(true)} className="mr-4 text-3xl text-indigo-500 p-2"><FontAwesomeIcon icon={faBars}/></button>
+          </nav>
         </header>
-        {isBar ? <NavBar></NavBar> : ""}
+
+        {isOpenSearch ? 
+          <div className="m-2">
+            <input type="text" placeholder="検索" className="w-full rounded-xl w-44 pl-2 h-10 bg-white"
+            value={input}
+            onChange={(e: ChangeEvent<HTMLInputElement>)=>{setInput(e.target.value)}}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                goSearch()
+              }
+            }}
+            />
+          </div>
+        : ""}
+        
+        <Drawer
+        anchor={'top'}
+        open={isDrawer}
+        onClose={()=>setIsDrawer(false)}
+        >
+          <NavBar 
+          onModalK={()=>{
+              setIsDrawer(false);
+              setType(true);
+              setIsOpen(true);
+          }}
+          onModalJ={()=>{
+            setIsDrawer(false);
+            setType(false);
+            setIsOpen(true);         
+          }}
+          ></NavBar>
+        </Drawer>
         <Modal isOpen={isOpen} type={type} onClose={() => setIsOpen(false)}></Modal>
       </>
   );

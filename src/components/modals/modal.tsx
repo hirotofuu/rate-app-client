@@ -93,7 +93,7 @@ const Modal:React.FC<Props> = ({ isOpen, type, onClose }) => {
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl ">
 
               <div className="flex justify-between mb-6 text-xl">
-                <h1 className="font-semibold">確認</h1>
+                <h1 className="font-semibold">授業入力</h1>
                 <button onClick={onClose}><FontAwesomeIcon icon={faXmark} className="text-2xl"/></button>
               </div>
 

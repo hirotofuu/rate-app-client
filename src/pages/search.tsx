@@ -1,14 +1,16 @@
 import { NextPage, GetStaticProps, GetServerSideProps } from 'next';
 import {filterArticle} from '../libs/fetchFunc';
-import {createRef, useCallback, useEffect} from 'react';
+import {createRef, useCallback, useEffect, useState} from 'react';
 import type {Class} from "../types/class";
+import {useFetch} from "./../hooks/useFetch";
 import Footer from '../components/footer';
 import Header from '../components/header';
 import Frame from '../components/frame';
 import Filter from '../components/filterBox';
 import NotFound from "../components/notFound";
-import Jugyos25 from "../components/25/jugyo25"
-import JugyoChoice from '../components/choices/jugyoChoice';
+import Jugyos25 from "../components/25/jugyo25";
+import Meta from "../components/meta"
+
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -38,7 +40,8 @@ type Factor={
 
  const Home: NextPage<Factor> = ({filteredArticle, faculty, campus, class_name, teacher_name}) => {
   const ref = createRef<HTMLUListElement>()
-  
+  const [Jugyo, setJugyo] = useState<Class[]>([])
+  const {data: J} = useFetch(`/api/filterJugyo/${faculty}/${campus}/${class_name}/${teacher_name}`)
   const scrollToBottomOfList = useCallback(() => {
     ref!.current!.scrollIntoView({
       behavior: 'smooth',
@@ -48,10 +51,13 @@ type Factor={
 
   useEffect(()=>{
     scrollToBottomOfList()
-  }, [filteredArticle])
+    if(J){
+      setJugyo(J.data)
+    } 
+  }, [filteredArticle, J])
   return (
     <>
-
+      <Meta pageTitle={`検索結果`} pageDesc={`検索結果`}></Meta>
       <Header></Header>
       <Frame>
 
@@ -62,7 +68,7 @@ type Factor={
 
             {filteredArticle.length==0 ? <NotFound type={false} buttonName="授業を投稿しましょう" url={`/create/jugyo`}></NotFound> : ""}
 
-            <Jugyos25 Jugyos={filteredArticle}></Jugyos25>
+            <Jugyos25 Jugyos={Jugyo}></Jugyos25>
           </ul>
 
       </Frame>

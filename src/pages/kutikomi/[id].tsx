@@ -15,6 +15,7 @@ import NotFoundC from '../../components/notFoundComment';
 import CommentChoice from "../../components/choices/commentChoice";
 import KutikomiArticle from '../../components/kutikomiArticle';
 import TextareaComment from "../../components/input/textareComment";
+import Meta from "../../components/meta"
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id: any = context.params?.id;
@@ -27,7 +28,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         jugyo,
         comments
     },
-    revalidate: 20
+    revalidate: 120
   };
 }
 
@@ -91,7 +92,7 @@ const ShowJugyo: NextPage<Factor> = ({kutikomi, jugyo, comments}) => {
 
   return (
     <>
-
+      <Meta pageTitle={`${jugyo.class_name}`} pageDesc={`${jugyo.class_name}のページ`}></Meta>
       <Header></Header>
       <Frame>
         <KutikomiArticle kutikomi={kutikomi} jugyo={jugyo}></KutikomiArticle>

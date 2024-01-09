@@ -61,7 +61,7 @@ const CommentChoice: React.FC<Props> =({comment})=>{
     <div  className=" pt-3 pb-3 pl-3 pr-3 border-b" key={comment.id}>
 
       <div className="ml-1 w-full">
-        <p className="pt-1  text-sm font-medium mr-6 font-semibold"><span className="text-blue-500">{comment.id}</span> {comment.name ? comment.name : "名無しさん"} <span className="font-normal text-1 font-normal text-gray-500">| {comment.day}</span></p>
+        <p className="pt-1  text-sm font-medium mr-6 font-semibold"> {comment.name ? comment.name : "名無しさん"} <span className="font-normal text-1 font-normal text-gray-500">| {comment.day}</span></p>
       
         <p className="mt-2 text-sm ">{comment.comment}</p>
       </div>
@@ -74,11 +74,11 @@ const CommentChoice: React.FC<Props> =({comment})=>{
 
 
       {isReply ? <ul className=" w-2/3 ml-3 pt-3 pl-3 border-l-2">
-        {newplayReply.map((rep: newReply, index: number)=>
-        <li key={index}><NewReplyChoice reply={rep}></NewReplyChoice></li>
-        )}
         {displayReply.map((rep: Reply, index: number)=>
         <li key={index}><ReplyChoice reply={rep}></ReplyChoice></li>
+        )}
+        {newplayReply.map((rep: newReply, index: number)=>
+        <li key={index}><NewReplyChoice reply={rep}></NewReplyChoice></li>
         )}
         <input
         type="text"

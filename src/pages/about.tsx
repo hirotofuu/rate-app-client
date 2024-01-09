@@ -1,10 +1,12 @@
 import { NextPage,} from 'next';
 import Frame from '../components/frame';
 import Header from '../components/header';
+import Meta from "../components/meta"
 
  const About: NextPage = () => {
   return (
     <>
+    <Meta pageTitle={`このサイトについて`} pageDesc={`このサイトについて`}></Meta>
     <Header></Header>
     <Frame>
       <div>
@@ -26,10 +28,6 @@ import Header from '../components/header';
           <p>・特定の人物への誹謗中傷をお控えください。された場合、その記述は削除の対象になります。</p>
           <p>・過度に性的な表現をお控えください。された場合、その記述は削除の対象になります。</p>
           <p>・故意に間違った情報を入力するのをおやめくださいされた場合、その記述は削除の対象になります。</p>
-        </section>
-        <section>
-          <h1 className="mb-1 mt-6 font-semibold border-b-2">お問い合わせ</h1>
-          <p>諸事情により削除して欲しい口コミや授業、コメントがある場合、このメールアドレスに削除して欲しい理由と授業または口コミのリンク、コメントの場合は名前の横にある数字とリンクを送ってください。</p>
         </section>
       </div>
     </Frame>

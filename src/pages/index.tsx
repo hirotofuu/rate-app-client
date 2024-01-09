@@ -1,31 +1,28 @@
-import { NextPage, GetStaticProps } from 'next';
-import {useApiToken} from "../hooks/useApiToken"
-import {getIndexArticle} from '../libs/fetchFunc';
 import type {Class} from "../types/class";
 import Jugyos25 from "../components/25/jugyo25";
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Frame from '../components/frame';
 import Filter from '../components/filterBox';
+import { useState, useEffect } from 'react';
+import {useFetch} from "./../hooks/useFetch"
+import Meta from "../components/meta"
 
-export const getStaticProps: GetStaticProps = async () => {
-  const Jugyo: Class[]=await getIndexArticle();
-  return{
-    props: {
-        Jugyo,
-    },
-  };
-}
 
-type Factor={
-  Jugyo: Class[];
-}
 
- const Home: NextPage<Factor> = ({Jugyo}) => {
-  const {apiToken}=useApiToken();
+
+
+export default function Home() {
+  const [Jugyo, setJugyo] = useState<Class[]>([])
+  const {data: J} = useFetch(`/api/fetchIndexJugyo`)
+  useEffect(()=>{
+    if (J) {
+      setJugyo(J.data);
+    }
+  }, [J])
   return (
     <>
-
+      <Meta pageTitle={`トップページ`} pageDesc={`慶應大学の授業掲示板`}></Meta>
       <Header></Header>
       <Frame>
         <Filter faculty="" campus="" class_name="" teacher_name=""></Filter>
@@ -40,4 +37,3 @@ type Factor={
   );
 };
 
-export default Home;

@@ -1,5 +1,5 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { ChangeEvent, useState, useEffect, useCallback } from 'react';
+import { ChangeEvent, useState, useCallback } from 'react';
 import axios from '../../../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
@@ -12,6 +12,9 @@ import Canceal from "../../../../../components/canceal"
 import Textarea from "../../../../../components/input/textarea"
 import RadioInput from "../../../../../components/input/radioInput"
 import KutikomiModal from "../../../../../components/modals/KutikomiModal"
+import InputFactor from "../../../../../components/inputFactor"
+import Meta from "../../../../../components/meta"
+import { Alert } from "@mui/material";
 
 type RegisterForm={
   attend: string;
@@ -51,6 +54,7 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   const now = new Date();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const [registerForm, setRegisterForm]=useState<RegisterForm>({
     attend: '',
@@ -78,6 +82,12 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
   const onSubmit = useCallback(async (e: any) => {
+    e.preventDefault();
+    setIsError(false)
+    if(!(registerForm.attend && registerForm.type && registerForm.text && registerForm.task && registerForm.test && registerForm.comment && registerForm.evaluate && registerForm.rate!=0) || !(registerForm.task.length<=500 && registerForm.test.length<=500 && registerForm.comment.length<=500)){
+      setIsError(true);
+      return 0;
+    }
     if (!executeRecaptcha) {
       console.log("Execute recaptcha not yet available");
       return;
@@ -85,7 +95,7 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
     const reCaptchaToken = await executeRecaptcha('kutikomi');
     
     
-    const apiEndPoint = '/api/enquiry';
+  const apiEndPoint = '/api/enquiry';
   const isOk = await fetch(apiEndPoint, {
     method: 'POST',
     headers: {
@@ -99,7 +109,7 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
     console.log(isOk)
     setIsOpen(true);
   }
-  } , [executeRecaptcha]
+  } , [executeRecaptcha, registerForm]
   );
 
 
@@ -122,22 +132,19 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
   return (
 
       <div>
+        <Meta pageTitle={`口コミ投稿ページ`} pageDesc={`口コミ投稿ページ`}></Meta>
         <Header></Header>
         <div className="container mx-auto mb-5">
           <div className="max-w-xl p-5 mx-auto xl:border-4 lg:border-4 md:border-4 my-2 xl:my-10 lg:my-10 md:my-10   bg-white rounded-md">
             <div className="text-center mb-8">
-              <h1 className="my-3 text-3xl font-semibold text-gray-700">口コミ登録</h1>
-              <h2 className="text-gray-400">口コミを登録して、見聞を広めよう!!!</h2>
+              <h1 className="my-3 text-3xl font-semibold text-gray-700">口コミ投稿</h1>
+              <h2 className="text-gray-400">口コミを投稿して、見聞を広めよう!!!</h2>
             </div>
-            <section className="mb-6">
-              <label id="class_name" className="text-sm mb-2 text-gray-600">授業名</label>
-              <p className=" py-2 text-sm">{class_name}</p>
-            </section>
-            <section className="mb-6">
-              <label id="teacher_name" className="text-sm mb-2 text-gray-600">担当名</label>
-              <p className=" py-2 text-sm">{teacher_name}</p>
-            </section>
 
+            <InputFactor title="授業名" content={class_name}></InputFactor>
+            <InputFactor title="担当名" content={teacher_name}></InputFactor>
+
+            <form>
               <RadioInput key="attend" title="出席" name="attend" values={["ある", "ない"]}
               updateInput={updateRegisterForm}></RadioInput>
 
@@ -174,8 +181,11 @@ const Register: NextPage<Factor> = ({id, class_name, teacher_name}) => {
                 />
               </section>
 
+              {isError ? <Alert severity="error">すべての必須入力事項を埋めてください</Alert> : ""}
+
               <Button onPush={onSubmit}>確認</Button>
               <Canceal></Canceal>
+            </form>
 
 
 

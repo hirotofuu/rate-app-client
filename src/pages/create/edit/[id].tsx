@@ -1,5 +1,6 @@
 import { NextPage, GetServerSideProps } from 'next';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import axios from '../../../libs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import type {Class} from "../../../types/class"
@@ -10,6 +11,7 @@ import Footer from '../../../components/footer';
 import Canceal from "../../../components/canceal"
 import InputNo from "../../../components/input/inputTextNo"
 import Select from "../../../components/input/select"
+import Meta from "../../../components/meta"
 import {faculty_contents} from "../../../libs/faculty" 
 import {campus_contents} from "../../../libs/campus" 
 
@@ -55,6 +57,7 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
     content: Jugyo.content ? Jugyo.content : ""
   })
 
+  const router=useRouter();
 
 
   const updateSelectTextForm=(e: ChangeEvent<HTMLSelectElement>)=>{
@@ -66,21 +69,24 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
   };
 
 
-  const register = () => {
-    if(Jugyo.faculty==registerForm.faculty && Jugyo.url==registerForm.url && Jugyo.field==registerForm.field && Jugyo.campus==registerForm.campus) return 0;
-    axios
-          .put('/api/jugyoEdit', registerForm)
-          .then((res: AxiosResponse) => {
-          })
-          .catch((err: AxiosError) => {
-            console.log(err)
-          });
-  };
+  const register =useCallback(async (e: any) => {
+    e.preventDefault();
+    if(!(Jugyo.faculty==registerForm.faculty && Jugyo.url==registerForm.url && Jugyo.field==registerForm.field && Jugyo.campus==registerForm.campus)){
+      axios.put('/api/jugyoEdit', registerForm)
+            .then((res: AxiosResponse) => {
+              router.push(`/class/${Jugyo.id}`);
+            })
+            .catch((err: AxiosError) => {
+              console.log(err)
+            });
+    }
+        } , [registerForm]);
 
 
   return (
 
       <>
+        <Meta pageTitle={`${registerForm.class_name}の編集ページ`} pageDesc={`${registerForm.class_name}の編集ページ`}></Meta>
         <Header></Header>
         <div className="container mx-auto mb-5">
           <div className="max-w-xl p-5 mx-auto xl:border-4 lg:border-4 md:border-4 my-2 xl:my-10 lg:my-10 md:my-10   bg-white rounded-md">
@@ -98,7 +104,7 @@ const EditJugyo: NextPage<Factor> = ({Jugyo}) => {
               <p className=" py-2 text-sm">{registerForm.teacher_name}</p>
             </section>
 
-            <form onSubmit={register} action={`/class/${Jugyo.id}`}>
+            <form>
 
               <Select key="faculty" title="学部" name="faculty" value={registerForm.faculty} contents={faculty_contents} updateSelect={updateSelectTextForm}></Select>
 

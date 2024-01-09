@@ -71,7 +71,7 @@ const JugyoModal:React.FC<Props> = ({ isOpen, onClose, registerForm, onPush }) =
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl ">
 
               <div className="flex justify-between mb-6 text-xl">
-                <h1 className="font-semibold">確認</h1>
+                <h1 className="font-semibold">確認（この内容でいいですか？）</h1>
                 <button onClick={onClose}><FontAwesomeIcon icon={faXmark} className="text-2xl"/></button>
               </div>
 
@@ -82,7 +82,8 @@ const JugyoModal:React.FC<Props> = ({ isOpen, onClose, registerForm, onPush }) =
                 <InputFactor title="担当者" content={registerForm.teacher_name}></InputFactor>
                 <InputFactor title="学部" content={registerForm.faculty}></InputFactor>
                 <InputFactor title="キャンパス" content={registerForm.campus}></InputFactor>
-                <InputFactor title="url" content={registerForm.url}></InputFactor>
+                <InputFactor title="科目" content={registerForm.field ? registerForm.field : "入力なし"}></InputFactor>
+                <InputFactor title="url" content={registerForm.url ? registerForm.url : "入力なし"}></InputFactor>
               </div>
               
 

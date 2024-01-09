@@ -9,6 +9,7 @@ import Frame from '../../components/frame'
 import JugyoTitle from '../../components/jugyoMidasi'
 import NotFound from '../../components/notFound'
 import Kutikomis25 from "../../components/25/kutikomi25"
+import Meta from "../../components/meta"
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id: any = context.params?.id
@@ -19,7 +20,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         Jugyo,
         kutikomis
     },
-    revalidate: 30
+    revalidate: 120
   };
 }
 
@@ -44,6 +45,7 @@ const ShowJugyo: NextPage<Factor> = ({Jugyo, kutikomis}) => {
   
   return (
     <>
+      <Meta pageTitle={`授業ページ`} pageDesc={`授業ページ`}></Meta>
       <Header></Header>
       <JugyoTitle jugyo={Jugyo} starNum={stars!=0 ? stars/kutikomis.length : 0}></JugyoTitle>
       <Frame>
