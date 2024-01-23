@@ -11,7 +11,7 @@ import {useFetch} from "./../hooks/useFetch"
 import Meta from "../components/meta"
 
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const data = await getIndexArticle();
 
 
@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       data
     },
-    // ページは10秒ごとに再検証（再レンダリング）されます
+    // ページは120秒ごとに再検証（再レンダリング）される
     revalidate: 120,
   };
 }
