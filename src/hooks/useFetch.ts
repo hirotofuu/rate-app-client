@@ -1,6 +1,9 @@
 import { useEffect, useCallback } from "react"
 import useSWR from "swr"
 import axios from "../libs/axios"
+
+// fetch hooks swr
+
 const fetcher = (url: string) => axios.get(url).then((res: any)=> res.data)
 export const useFetch = (url: string) => {
 
